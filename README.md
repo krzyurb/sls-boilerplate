@@ -19,7 +19,7 @@ $ yarn install
 
 ## Testing
 
-This project uses [jest](https://jestjs.io/) and [sinonjs](sinonjs) for tests.
+This project uses [jest](https://jestjs.io/) and [sinonjs](sinonjs) for tests. It also includes CircleCI config file.
 
 To start test suite simply run:
 
