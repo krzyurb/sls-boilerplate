@@ -1,13 +1,18 @@
+<p align="center">
+  <img src="https://github.com/serverless/assets/blob/master/Icon/Serverless_lockup_icon-red.png?raw=true" width="50">
+</p>
+
 # Serverless Boilerplate
 
-## Using as template
+## Using as a template
 
 You can use that boilerplate when generating new
-serverless project using serverless cli:
+Serverless project using serverless cli:
 
 ```
 $ serverless create --template-url https://github.com/krzyurb/sls-boilerplate --name your-project-name
-cd your-project-name
+$ cd your-project-name
+$ yarn
 ```
 
 ## Installation
