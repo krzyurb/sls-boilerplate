@@ -4,8 +4,14 @@
   "description": "Serverless project boilerplate",
   "scripts": {
     "offline": "serverless offline start",
-    "test": "yarn jest --coverage",
-    "deploy": "serverless deploy"
+    "eslint": "eslint ./src",
+    "test": "yarn eslint && yarn jest tests/unit/ --coverage",
+    "test:int": "yarn jest tests/integration/",
+    "deploy:local": "serverless deploy",
+    "deploy": "serverless deploy --stage $STAGE --region $REGION --verbose"
+  },
+  "engines": {
+    "node": "8.10"
   },
   "author": "krzyurb",
   "license": "ISC",
@@ -28,6 +34,8 @@
     "webpack": "^4.26.1"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "serverless": "^1.35.1",
     "winston": "^3.1.0"
   }
 }

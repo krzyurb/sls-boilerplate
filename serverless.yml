@@ -6,7 +6,7 @@ provider:
   name: aws
   runtime: nodejs8.10
   region: eu-central-1
-  environment: ${file(env.yml)}
+  # environment: ${file(env.yml)}
 
 plugins:
   - serverless-webpack

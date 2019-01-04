@@ -1,28 +1,95 @@
-# Javascript Node CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-javascript/ for more details
-#
+default_environment: &default_environment
+  docker:
+    - image: circleci/node:8.10
+  working_directory: ~/repo
+
 version: 2
 jobs:
-  build:
-    docker:
-      - image: circleci/node:8.10
-
-    working_directory: ~/repo
-
+  unit_tests:
+    <<: *default_environment
     steps:
       - checkout
       - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
+          key: dependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run:
-          name: Install dependencies
+          name: Install packages
           command: yarn install
       - save_cache:
+          key: dependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          - ./node_modules
       - run:
-          name: Tests
-          command: yarn test
+          name: Unit Test
+          command: yarn run test
+
+  integration_tests:
+    <<: *default_environment
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - run:
+          name: Deploy and run tests
+          command: |
+            export STAGE=test
+            export NODE_ENV=test
+            export REGION=$AWS_REGION
+            export INT_TEST_URL="$(yarn deploy | grep ServiceEndpoint | sed s/ServiceEndpoint\:\ //g)"
+            echo 'export TEST_URL=$INT_TEST_URL' >> $BASH_ENV
+            source $BASH_ENV
+            yarn run test:int
+
+  deploy_staging:
+    <<: *default_environment
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - run:
+          name: Deploy staging
+          command: |
+            export STAGE=staging
+            export NODE_ENV=$STG_NODE_ENV
+            export REGION=$AWS_REGION
+            yarn deploy
+
+  deploy_production:
+    <<: *default_environment
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - run:
+          name: Deploy production
+          command: |
+            export STAGE=production
+            export NODE_ENV=production
+            export REGION=$AWS_REGION
+            yarn deploy
+
+workflows:
+  version: 2
+  build_test_deploy:
+    jobs:
+      - unit_tests
+      - integration_tests:
+          requires:
+            - unit_tests
+          filters:
+            branches:
+              only:
+                - integration
+      - deploy_staging:
+          requires:
+            - unit_tests
+          filters:
+            branches:
+              only:
+                - master
+      - deploy_production:
+          requires:
+            - unit_tests
+          filters:
+            branches:
+              only:
+                - production

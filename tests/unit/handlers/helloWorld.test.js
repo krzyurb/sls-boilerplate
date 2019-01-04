@@ -1,4 +1,4 @@
-import Handler from '../src/handlers/helloWorld/handler';
+import Handler from '../../../src/handlers/helloWorld/handler';
 
 describe('Hello function', () => {
   test('responds with hello message', async () => {
