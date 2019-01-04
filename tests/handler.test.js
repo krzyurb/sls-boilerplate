@@ -6,7 +6,7 @@ describe('Hello function', () => {
 
     const expected = {
       body: JSON.stringify({
-        message: 'Go Serverless v1.0! Your function executed successfully!',
+        message: 'Hello world!',
       }),
       headers: {
         'Access-Control-Allow-Origin': '*',
