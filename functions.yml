@@ -1,5 +1,5 @@
 helloWorld:
-  handler: src/handler.default
+  handler: src/handlers/helloWorld/index.default
   events:
     - http:
         path: hello-world
