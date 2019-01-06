@@ -1,0 +1,19 @@
+import Handler from '../../../src/handlers/{{name.lower}}/handler';
+
+describe('{{name.upper}} handler', () => {
+  test('responds with hello message', async () => {
+    const result = await new Handler().execute();
+
+    const expected = {
+      body: JSON.stringify({
+        message: 'Hello world!',
+      }),
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+      statusCode: 200,
+    };
+
+    expect(result).toEqual(expected);
+  });
+});

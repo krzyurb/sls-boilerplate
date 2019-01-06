@@ -1,0 +1,6 @@
+import {{name.upper}}Handler from './handler';
+
+export default (event, context) => {
+  const handler = new {{name.upper}}Handler();
+  return handler.execute(event, context);
+};

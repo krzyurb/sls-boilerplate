@@ -8,7 +8,8 @@
     "test": "yarn eslint && yarn jest tests/unit/ --coverage",
     "test:int": "yarn jest tests/integration/",
     "deploy:local": "serverless deploy",
-    "deploy": "serverless deploy --stage $STAGE --region $REGION --verbose"
+    "deploy": "serverless deploy --stage $STAGE --region $REGION --verbose",
+    "generator": "yarn plop"
   },
   "engines": {
     "node": "8.10"
@@ -28,6 +29,7 @@
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.11.1",
     "jest": "^23.6.0",
+    "plop": "^2.2.0",
     "serverless-offline": "^3.31.3",
     "serverless-webpack": "^5.2.0",
     "sinon": "^7.1.1",
