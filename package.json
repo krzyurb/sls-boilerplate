@@ -5,8 +5,10 @@
   "scripts": {
     "offline": "serverless offline start",
     "eslint": "eslint ./src",
-    "test": "yarn eslint && yarn jest tests/unit/ --coverage",
-    "test:int": "yarn jest tests/integration/",
+    "test": "yarn eslint && yarn test:unit && yarn test:int",
+    "test:unit": "yarn jest tests/unit/ --coverage",
+    "test:int": "yarn jest tests/integration/ --coverage",
+    "test:acc": "yarn jest tests/acceptance/",
     "deploy:local": "serverless deploy",
     "deploy": "serverless deploy --stage $STAGE --region $REGION --verbose",
     "generator": "yarn plop"

@@ -1,10 +1,19 @@
-import axios from 'axios';
+import Handler from '../../src/handlers/helloWorld/handler';
 
-describe('Hello world handler', () => {
+describe('Hello function', () => {
   test('responds with hello message', async () => {
-    const response = await axios.get(`${process.env.TEST_URL}/hello-world`);
+    const result = await new Handler().execute();
 
-    expect(response.status).toEqual(200);
-    expect(response.data).toEqual({ message: 'Hello world!' });
+    const expected = {
+      body: JSON.stringify({
+        message: 'Hello world!',
+      }),
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+      statusCode: 200,
+    };
+
+    expect(result).toEqual(expected);
   });
 });

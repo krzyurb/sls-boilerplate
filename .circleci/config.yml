@@ -4,47 +4,68 @@ default_environment: &default_environment
   working_directory: ~/repo
 
 version: 2
+
 jobs:
+  checkout:
+    <<: *default_environment
+    steps:
+      - checkout
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - .
+  build:
+    <<: *default_environment
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - restore_cache:
+          key: yarn-{{ checksum "yarn.lock" }}
+      - run: yarn install
+      - save_cache:
+          key: yarn-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/repo/node_modules
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - node_modules
   unit_tests:
     <<: *default_environment
     steps:
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - attach_workspace:
+          at: ~/repo
       - run:
-          name: Install packages
-          command: yarn install
-      - save_cache:
-          key: dependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
-          paths:
-          - ./node_modules
-      - run:
-          name: Unit Test
-          command: yarn run test
-
+          name: Unit Tests
+          command: yarn run test:unit
   integration_tests:
     <<: *default_environment
     steps:
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - attach_workspace:
+          at: ~/repo
       - run:
-          name: Deploy and run tests
+          name: Integration Tests
+          command: yarn run test:int
+  acceptance_tests:
+    <<: *default_environment
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Deploy and run acceptanc tests
           command: |
             export STAGE=test
             export NODE_ENV=test
             export REGION=$AWS_REGION
-            export INT_TEST_URL="$(yarn deploy | grep ServiceEndpoint | sed s/ServiceEndpoint\:\ //g)"
-            echo 'export TEST_URL=$INT_TEST_URL' >> $BASH_ENV
+            export ACC_TEST_URL="$(yarn deploy | grep ServiceEndpoint | sed s/ServiceEndpoint\:\ //g)"
+            echo 'export TEST_URL=$ACC_TEST_URL' >> $BASH_ENV
             source $BASH_ENV
-            yarn run test:int
-
+            yarn run test:acc
   deploy_staging:
     <<: *default_environment
     steps:
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - attach_workspace:
+          at: ~/repo
       - run:
           name: Deploy staging
           command: |
@@ -52,13 +73,11 @@ jobs:
             export NODE_ENV=$STG_NODE_ENV
             export REGION=$AWS_REGION
             yarn deploy
-
   deploy_production:
     <<: *default_environment
     steps:
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - attach_workspace:
+          at: ~/repo
       - run:
           name: Deploy production
           command: |
@@ -71,17 +90,28 @@ workflows:
   version: 2
   build_test_deploy:
     jobs:
-      - unit_tests
+      - checkout
+      - build:
+          requires:
+            - checkout
+      - unit_tests:
+          requires:
+            - build
       - integration_tests:
           requires:
+            - build
+      - acceptance_tests:
+          requires:
             - unit_tests
+            - integration_tests
           filters:
             branches:
               only:
-                - integration
+                - acceptance
       - deploy_staging:
           requires:
             - unit_tests
+            - integration_tests
           filters:
             branches:
               only:
@@ -89,6 +119,7 @@ workflows:
       - deploy_production:
           requires:
             - unit_tests
+            - integration_tests
           filters:
             branches:
               only:
