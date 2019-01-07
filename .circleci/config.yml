@@ -30,22 +30,14 @@ jobs:
           root: ~/repo
           paths:
             - node_modules
-  unit_tests:
+  unit_integration_tests:
     <<: *default_environment
     steps:
       - attach_workspace:
           at: ~/repo
       - run:
           name: Unit Tests
-          command: yarn run test:unit
-  integration_tests:
-    <<: *default_environment
-    steps:
-      - attach_workspace:
-          at: ~/repo
-      - run:
-          name: Integration Tests
-          command: yarn run test:int
+          command: yarn run test
   acceptance_tests:
     <<: *default_environment
     steps:
@@ -94,32 +86,26 @@ workflows:
       - build:
           requires:
             - checkout
-      - unit_tests:
-          requires:
-            - build
-      - integration_tests:
+      - unit_integration_tests:
           requires:
             - build
       - acceptance_tests:
           requires:
-            - unit_tests
-            - integration_tests
+            - unit_integration_tests
           filters:
             branches:
               only:
                 - acceptance
       - deploy_staging:
           requires:
-            - unit_tests
-            - integration_tests
+            - unit_integration_tests
           filters:
             branches:
               only:
                 - master
       - deploy_production:
           requires:
-            - unit_tests
-            - integration_tests
+            - unit_integration_tests
           filters:
             branches:
               only:
