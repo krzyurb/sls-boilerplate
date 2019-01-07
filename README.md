@@ -4,7 +4,7 @@
 
 # Serverless Boilerplate
 [![](https://img.shields.io/circleci/project/github/krzyurb/sls-boilerplate/master.svg)](https://circleci.com/gh/krzyurb/sls-boilerplate)
-![](https://img.shields.io/badge/node-8.10-brightgreen.svg)
+[![](https://img.shields.io/badge/node-8.10-brightgreen.svg)](https://github.com/krzyurb/sls-boilerplate/blob/master/package.json)
 [![](https://img.shields.io/badge/Serverless-Framework-red.svg)](https://serverless.com/framework/)
 
 ## Using as a template
@@ -18,38 +18,59 @@ $ cd your-project-name
 $ yarn
 ```
 
-## Installation
+## Installation and development
 
 ```
-$ cp env.yml.example env.yml
 $ yarn install
+```
+
+The application can be run locally (by default on 8080 portn) using:
+
+```
+$ yarn offline
 ```
 
 ## Testing
 
 This project uses [jest](https://jestjs.io/) and [sinonjs](https://sinonjs.org/) for tests.
 
-To start test suite simply run:
+To start (unit and integration) test suite simply run:
 
 ```
 $ yarn test
 ```
 
-An integration test suite can be run using:
+Tests are divided into three modules:
+* Unit
+* Integration - to test handlers locally
+* Acceptance - to test endpoints on the deployed test environment
+
+You can run them using commands:
 
 ```
+$ yarn test:unit
 $ yarn test:int
+$ yarn test:acc
+```
+
+## CI/CD
+
+CI/CD workflow for this project is done using CircleCI.
+
+* `master` branch deploys an app for staging for QA
+* `production` branch deploys production
+* `acceptance` branch creates a test environment and runs an acceptance test suite
+
+## Generators
+
+Project uses [plopjs](https://plopjs.com/) for code generators. It allows e.g. to add new handlers.
+To run generator use:
+
+```
+$ yarn generator
 ```
 
 ## Serverless plugins
 
 * [serverless-webpack](https://github.com/serverless-heaven/serverless-webpack)
 * [serverless-offline](https://github.com/dherault/serverless-offline)
-
-## CI/CD
-
-CI/CD workflow for this project is done using CircleCI.
-
-* `production` branch deploys production
-* `master` branch deploys an app for staging for QA
-* code pushed to `integration` creates a test environment and runs integration tests
