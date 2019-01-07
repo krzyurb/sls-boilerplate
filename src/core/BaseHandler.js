@@ -1,9 +1,17 @@
 import loggerFactory from './loggerFactory';
 
 export default class BaseHandler {
-  constructor() {
+  constructor(dependencies) {
     this.handlerName = this.constructor.name;
     this.logger = loggerFactory();
+
+    this.injectDependencies(dependencies);
+  }
+
+  injectDependencies(dependencies) {
+    if (dependencies) {
+      Object.assign(this, dependencies);
+    }
   }
 
   async execute(event, context) {
