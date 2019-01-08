@@ -22,6 +22,7 @@ $ yarn
 
 ```
 $ yarn install
+$ cp .env.example .env
 ```
 
 The application can be run locally (by default on 8080 portn) using:
@@ -60,6 +61,23 @@ CI/CD workflow for this project is done using CircleCI.
 * `master` branch deploys an app for staging for QA
 * `production` branch deploys production
 * `acceptance` branch creates a test environment and runs an acceptance test suite
+
+To deploy environment for developer use command:
+
+```
+$ yarn deploy:local
+```
+
+### Secrets
+
+All secrets are stored in [AWS SSM Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html).
+
+You can acces them using:
+```
+$ yarn secret:get
+$ yarn secret:set
+$ yarn secret:list
+```
 
 ## Generators
 

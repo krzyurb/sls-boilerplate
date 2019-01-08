@@ -32,7 +32,7 @@ module.exports = (plop) => {
       },
       {
         type: 'append',
-        path: 'functions.yml',
+        path: 'config/functions.yml',
         templateFile: 'generators/handler/templates/function.hbs',
       },
     ],

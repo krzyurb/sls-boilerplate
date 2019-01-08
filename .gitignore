@@ -1,4 +1,4 @@
-# package directories
+# Package directories
 node_modules
 
 # Serverless directories
@@ -6,7 +6,7 @@ node_modules
 .webpack
 
 # Environment variables
-env.yml
+.env
 
 # OSX Files
 .DS_Store

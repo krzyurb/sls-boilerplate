@@ -1,4 +1,4 @@
-service: sls-boilerplate
+service: ${env:SERVICE_NAME}
 
 frameworkVersion: '>=1.0.0 <2.0.0'
 
@@ -6,6 +6,7 @@ provider:
   name: aws
   runtime: nodejs8.10
   region: eu-central-1
+  environment: ${file(config/environment.yml)}
 
 plugins:
   - serverless-webpack
@@ -15,9 +16,10 @@ package:
   individually: true
 
 custom:
+  secrets: /${self:service}/${env:STAGE}
   webpack:
     webpackConfig: 'webpack.config.js'
     includeModules: false
     packager: 'yarn'
 
-functions: ${file(functions.yml)}
+functions: ${file(config/functions.yml)}

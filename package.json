@@ -3,13 +3,16 @@
   "version": "1.0.0",
   "description": "Serverless project boilerplate",
   "scripts": {
-    "offline": "serverless offline start",
     "eslint": "eslint ./src",
     "test": "yarn eslint && yarn test:local",
     "test:local": "yarn jest tests/integration/ tests/unit/ --coverage",
     "test:acceptance": "yarn jest tests/acceptance/",
-    "deploy:local": "serverless deploy",
+    "offline": "export $(cat .env | xargs) && serverless offline start",
+    "deploy:local": "export $(cat .env | xargs) && SLS_DEBUG=* serverless deploy --stage $STAGE --region $REGION --verbose",
     "deploy": "serverless deploy --stage $STAGE --region $REGION --verbose",
+    "secret:set": "export $(cat .env | xargs) && ./bin/set-secret.sh",
+    "secret:get": "export $(cat .env | xargs) && ./bin/get-secret.sh",
+    "secret:list": "export $(cat .env | xargs) && ./bin/list-secrets.sh",
     "generator": "yarn plop"
   },
   "engines": {
@@ -38,6 +41,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "dotenv": "^6.2.0",
     "serverless": "^1.35.1",
     "winston": "^3.1.0"
   }

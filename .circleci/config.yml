@@ -46,7 +46,7 @@ jobs:
       - run:
           name: Deploy and run acceptanc tests
           command: |
-            export STAGE=test
+            export STAGE=acc-test
             export NODE_ENV=test
             export REGION=$AWS_REGION
             export ACC_TEST_URL="$(yarn deploy | grep ServiceEndpoint | sed s/ServiceEndpoint\:\ //g)"

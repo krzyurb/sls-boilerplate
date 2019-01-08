@@ -1,0 +1,1 @@
+foo: ${ssm:${self:custom.secrets}/foo}

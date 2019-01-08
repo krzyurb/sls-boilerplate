@@ -1,0 +1,7 @@
+helloWorld:
+  handler: src/handlers/helloWorld/index.default
+  events:
+    - http:
+        path: hello-world
+        method: get
+        cors: true
