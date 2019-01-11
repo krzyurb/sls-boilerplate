@@ -7,4 +7,4 @@ else
   key=$1
 fi;
 
-aws ssm get-parameter --name "/sls-boilerplate/"$STAGE"/"$key --region eu-central-1 --with-decryption
+aws ssm get-parameter --name "/sls-boilerplate/"$STAGE"/"$key --region $REGION --with-decryption

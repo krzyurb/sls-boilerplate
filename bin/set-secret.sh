@@ -10,4 +10,4 @@ else
   key=$2
 fi;
 
-aws ssm put-parameter --name "/sls-boilerplate/"$STAGE"/"$key --value $value --type SecureString --region eu-central-1 --overwrite
+aws ssm put-parameter --name "/sls-boilerplate/"$STAGE"/"$key --value $value --type SecureString --region $REGION --overwrite

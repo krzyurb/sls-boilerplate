@@ -7,12 +7,12 @@
     "test": "yarn eslint && yarn test:local",
     "test:local": "yarn jest tests/integration/ tests/unit/ --coverage",
     "test:acceptance": "yarn jest tests/acceptance/",
-    "offline": "export $(cat .env | xargs) && serverless offline start",
-    "deploy:local": "export $(cat .env | xargs) && SLS_DEBUG=* serverless deploy --stage $STAGE --region $REGION --verbose",
+    "offline": "export $(cat ./config/.env | xargs) && serverless offline start",
+    "deploy:local": "export $(cat ./config/.env | xargs) && SLS_DEBUG=* serverless deploy --stage $STAGE --region $REGION --verbose",
     "deploy": "serverless deploy --stage $STAGE --region $REGION --verbose",
-    "secret:set": "export $(cat .env | xargs) && ./bin/set-secret.sh",
-    "secret:get": "export $(cat .env | xargs) && ./bin/get-secret.sh",
-    "secret:list": "export $(cat .env | xargs) && ./bin/list-secrets.sh",
+    "secret:set": "export $(cat ./config/.env | xargs) && ./bin/set-secret.sh",
+    "secret:get": "export $(cat ./config/.env | xargs) && ./bin/get-secret.sh",
+    "secret:list": "export $(cat ./config/.env | xargs) && ./bin/list-secrets.sh",
     "generator": "yarn plop"
   },
   "engines": {

@@ -6,7 +6,7 @@ node_modules
 .webpack
 
 # Environment variables
-.env
+**/.env
 
 # OSX Files
 .DS_Store
